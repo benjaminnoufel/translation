@@ -11,8 +11,8 @@ This is a library for translating text.
 
 - [Requirements](#requirements)
 - [Installation](#installation)
-    - [[NPM][npm]](#[npm][npm])
-    - [[Yarn][yarn]](#[yarn][yarn])
+  - [NPM](#using-npm)
+  - [Yarn](#using-yarn)
 - [Usage](#usage)
     - [Without fallback](#without-fallback)
     - [With fallback](#with-fallback)
@@ -26,13 +26,13 @@ This is a library for translating text.
 
 ## Installation
 
-### [NPM][npm]
+### Using npm:
 
 ```console
 $ npm install --save @benjaminnoufel/translation
 ```
 
-### [Yarn][yarn]
+### Using yarn:
 
 ```console
 $ yarn add @benjaminnoufel/translation
