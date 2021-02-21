@@ -1,0 +1,42 @@
+name: Test CI
+
+on:
+  push:
+    branches:
+      - next
+      - latest
+
+  pull_request:
+
+jobs:
+  test:
+    name: Check if the unit tests are successfull
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the project
+        uses: actions/checkout@v2
+
+      - name: Setting up the environment
+        run: cp .env.example .env
+
+      - name: Setting the development environment
+        run: sed -i 's/production/development/' .env
+
+      - name: Cleanup project
+        run: make clean
+
+      - name: Setting the token for installing private package
+        run: sed -i 's/NPM_AUTH_TOKEN=.*/NPM_AUTH_TOKEN=${{ secrets.NPM_AUTH_TOKEN }}/' .env
+
+      - name: Install the github token
+        run: make token
+
+      - name: Install the Node.js dependencies
+        run: make install
+
+      - name: Install the peer dependencies
+        run: make peer
+
+      - name: Check if all unit tests pass
+        run: make test

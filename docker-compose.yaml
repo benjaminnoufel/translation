@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  yarn:
+    image: node:15.0.0
+    user: node
+    working_dir: /home/node
+    entrypoint: yarn
+    command: --help
+    volumes:
+      - .:/home/node
+
+  bash:
+    image: node:15.0.0
+    user: node
+    working_dir: /home/node
+    entrypoint: bash
+    env_file: .env
+    volumes:
+      - .:/home/node

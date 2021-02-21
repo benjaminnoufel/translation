@@ -1,0 +1,52 @@
+name: Package npmjs
+
+on:
+  push:
+    branches:
+      - latest
+
+
+jobs:
+  package:
+    name: Build and publish the package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the project
+        uses: actions/checkout@v2
+
+      - name: Setting up the environment
+        run: cp .env.example .env
+
+      - name: Cleanup the project
+        run: make clean
+
+      - name: Register the current Git user name
+        run: git config user.name ${{ secrets.WORKFLOW_GITHUB_USERNAME }}
+
+      - name: Register the current Git user email
+        run: git config user.email ${{ secrets.WORKFLOW_GITHUB_EMAIL }}
+
+      - name: Setting the token for installing package on npmjs
+        run: sed -i 's/NPMJS_AUTH_TOKEN=.*/NPMJS_AUTH_TOKEN=${{ secrets.NPMJS_AUTH_TOKEN }}/' .env
+
+      - name: Setting the token for installing package on github
+        run: sed -i 's/NPM_AUTH_TOKEN=.*/NPM_AUTH_TOKEN=${{ secrets.NPM_AUTH_TOKEN }}/' .env
+
+      - name: Install the github token
+        run: make token
+
+      - name: Install the npmjs token
+        run: make npmjs
+
+      - name: Install the dependencies
+        run: make install
+
+      - name: Build the project
+        run: make build
+
+      - name: Build the types
+        run: make types
+
+      - name: Publish the package
+        run: 'make publish-npmjs || true'

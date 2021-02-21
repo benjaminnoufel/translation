@@ -1,0 +1,8 @@
+/.idea/
+/node_modules/
+/coverage/
+/dist
+/.env
+/.npmrc
+/.yarnrc
+/.cache

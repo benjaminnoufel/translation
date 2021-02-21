@@ -1,0 +1,42 @@
+name: Package
+
+on:
+  push:
+    branches:
+      - latest
+
+jobs:
+  package:
+    name: Build and publish the package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the project
+        uses: actions/checkout@v2
+
+      - name: Setting up the environment
+        run: cp .env.example .env
+
+      - name: Cleanup project
+        run: make clean
+
+      - name: Setting the token for installing private package
+        run: sed -i 's/NPM_AUTH_TOKEN=.*/NPM_AUTH_TOKEN=${{ secrets.NPM_AUTH_TOKEN }}/' .env
+
+      - name: Install the github token
+        run: make token
+
+      - name: Install the dependencies
+        run: make install
+
+      - name: Install the peer dependencies
+        run: make peer
+
+      - name: Build the project
+        run: make build
+
+      - name: Build the types
+        run: make types
+
+      - name: Publish the package
+        run: 'make publish || true'
