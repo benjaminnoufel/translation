@@ -2,9 +2,11 @@
     "exclude": [
         "src/translation.spec.ts"
     ],
+    "include": ["src"],
     "compilerOptions": {
         "target": "esnext",
         "module": "esnext",
+        "moduleResolution": "node",
         "strict": true,
         "noImplicitAny": true,
         "strictNullChecks": true,
@@ -13,6 +15,7 @@
         "strictPropertyInitialization": true,
         "noImplicitThis": true,
         "alwaysStrict": true,
+        "jsx": "react-jsx",
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,

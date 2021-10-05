@@ -13,9 +13,8 @@ This is a library for translating text.
 - [Installation](#installation)
   - [NPM](#using-npm)
   - [Yarn](#using-yarn)
-- [Usage](#usage)
-    - [Without fallback](#without-fallback)
-    - [With fallback](#with-fallback)
+- [Config options](#config-options)
+- [Examples](#examples)
 - [Changelog](#changelog)
 - [Contributing](#contributing)
 - [License](#license)
@@ -38,67 +37,29 @@ $ npm install --save @benjaminnoufel/translation
 $ yarn add @benjaminnoufel/translation
 ```
 
-## Usage
+## Config options
 
-### Without fallback
-```jsx
-import {useLanguage, useTranslation} from "@benjaminnoufel/translation";
+| key | value | default |
+| ------ | ----- | ------ |
+| locale | string | en |
+| fallbackLng | string | en |
+| separator | string | . |
+| fallbackMsg | string | TODO{separator}{word}{locale} or ""|
+| messages | object | {} |
 
-const App = () => {
-    const [lang] = useLanguage();
-    const translate = useTranslation({
-        name: {
-            en: "Name",
-            fr: "Nom"
-        },
-        description: {
-            en: "Description",
-            fr: "Description"
-        } 
-    })
-    
-    return (
-        <>
-            <p>Name: {translate("name", lang)}</p>
-        </>
-    );   
-}
+:warning: messages must be respect the JSON norm
 
-```
+## Examples
 
+see [`Examples`](./examples)
 
-### With fallback
-```jsx
-import {useLanguage, useTranslation} from "@@benjaminnoufel/translation";
-
-const App = () => {
-    const [lang] = useLanguage("en");
-    const translate = useTranslation({
-        name: {
-            en: "Name",
-            fr: "Nom"
-        },
-        description: {
-            en: "Description",
-            fr: "Description"
-        } 
-    })
-    
-    return (
-        <>
-            <p>Name: {translate("name", lang)}</p>
-        </>
-    );   
-}
-
-```
 ## Changelog
 
-see [`CHANGELOG.md`](./CHANGELOG.md)
+see [`CHANGELOG`](./CHANGELOG.md)
 
 ## Contributing
 
-see [`CONTRIBUTING.md`](./CONTRIBUTING.md)
+see [`CONTRIBUTING`](./CONTRIBUTING.md)
 
 ## License
 

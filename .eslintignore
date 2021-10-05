@@ -4,3 +4,4 @@ package.json
 jest.config.js
 dist/
 coverage/
+rollup.config.ts
