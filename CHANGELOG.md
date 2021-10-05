@@ -2,8 +2,25 @@
 
 ## Versions
 
+- [`2.0.1`](#201)
 - [`2.0.0`](#200)
 - [`0.1.0`](#010)
+
+## 0.2.1
+
+*2021-10-05*
+
+### Major changes
+
+None.
+
+### Minor changes
+
+- Adding Seo to package.json.
+
+### Bug & security fixes
+
+None.
 
 ## 2.0.0
 
