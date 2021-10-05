@@ -31,6 +31,20 @@ module.exports = {
     // Indicates which provider should be used to instrument code for coverage
     coverageProvider: "v8",
 
+    "globals": {
+        "window": {
+            navigator: {
+                language: "en-US"
+            },
+            localStorage: {
+                getItem: function (key) {},
+                setItem: function (key, value) {}
+            }
+        },
+        navigator: {
+            language: "en-US"
+        }
+    },
     // A list of reporter names that Jest uses when writing coverage reports
     // coverageReporters: [
     //   "json",
