@@ -1,24 +1,67 @@
-import path from "path";
-import {createContext, PropsWithChildren, useRef, useState} from "react";
+import {ReactNode, createContext, useContext, useRef, useState} from "react";
+
+interface TranslateContextProps {
+    userConfig?: IConfig;
+    children: ReactNode;
+}
 
 interface ITranslate {
     [key: string]: ITranslate;
 }
 
+interface IConfigMessages {
+    [key: string]: Record<string, any>;
+}
+
+interface IConfig {
+    locale: string;
+    fallbackLng: string;
+    separator?: string;
+    fallbackMsg?: string;
+    messages: IConfigMessages;
+}
+
+const rootConfig: IConfig = {
+    locale: "en",
+    fallbackLng: "en",
+    separator: ".",
+    messages: {}
+};
+
+interface ITranslateFunc {
+    defaultLanguage: string;
+    fallbackLng?: string;
+    separator?: string;
+    fallback?: string;
+}
+
+
 export type SetLanguage = (newLanguage: string) => void;
 
-export type TranslationCallback<T = string> = (key: string, defaultLanguage: string, separator?: string, fallback?: string) => T;
+const TranslationContext = createContext<IConfig>(rootConfig);
 
-const objectFind = (path: string, target: ITranslate): null | string | ITranslate => {
+export type TranslationCallback<T = string> = (key: string, {defaultLanguage, fallbackLng, separator, fallback}: ITranslateFunc) => T;
+
+interface IObjectFind {
+    path: string;
+    target: ITranslate;
+    separator: string;
+}
+
+const objectFind = ({path, target, separator}: IObjectFind): null | string | ITranslate => {
     for (const property in target) {
-        const [firstProperty, ...restProperties] = path.split(".");
+        const [firstProperty, ...restProperties] = path.split(separator);
 
         if (firstProperty === property) {
             if (0 === restProperties.length) {
                 return target[property];
             }
 
-            return objectFind(restProperties.join("."), target[property]);
+            return objectFind({
+                path: restProperties.join(separator),
+                target: target[property],
+                separator
+            });
         }
     }
 
@@ -39,15 +82,23 @@ export const useLanguage = (fallback?: string): [string, SetLanguage] => {
     return [lang, setLang];
 };
 
-
-export const useTranslation = <T = string>(initialTranslations: Record<string, any>): TranslationCallback<T> => {
+export const useTranslation = <T, >(initialTranslations: Record<string, any>): TranslationCallback<T> => {
     const translations = useRef(initialTranslations).current;
 
-    const translate = (translations: Record<string, any>) => <T = string>(key: string, defaultLanguage: string, separator: string = ".", fallback: string = `TODO.${key}.${defaultLanguage}`): string | T => {
+    const translate = (translations: Record<string, any>) => <T, >(key: string, {defaultLanguage, fallbackLng, separator, fallback}: ITranslateFunc): string | T => {
+        if ("undefined" === typeof separator) {
+            separator = ".";
+        }
+        if ("undefined" === typeof fallback) {
+            fallback = `TODO${separator}${key}${separator}${defaultLanguage}`;
+        }
         if (!key.includes(separator)) {
             if (translations[key]) {
                 if (translations[key][defaultLanguage]) {
                     return translations[key][defaultLanguage] as string;
+                }
+                if (fallbackLng && translations[key][fallbackLng]) {
+                    return translations[key][fallbackLng] as string;
                 }
 
                 if ("development" === process.env.NODE_ENV) {
@@ -60,18 +111,28 @@ export const useTranslation = <T = string>(initialTranslations: Record<string, a
             }
             return "";
         }
-        const foundTranslation = objectFind(key, translations);
+        const foundTranslation = objectFind({
+            path: key,
+            target: translations,
+            separator
+        });
         if (foundTranslation) {
             const foundTranslationLanguages = Object.entries(foundTranslation);
 
             const foundDefaultLanguage = foundTranslationLanguages.find(([defaultTranslation]) => defaultTranslation === defaultLanguage);
-            if (foundDefaultLanguage?.length) {
+            if ("undefined" !== typeof foundDefaultLanguage && foundDefaultLanguage.length) {
                 return foundDefaultLanguage[1] as string;
+            }
+            if ("undefined" !== typeof fallbackLng && "string" !== typeof foundTranslation && foundTranslation[fallbackLng]) {
+                return foundTranslation[fallbackLng] as unknown as string;
             }
             if ("development" === process.env.NODE_ENV) {
                 return fallback;
             }
             return "";
+        }
+        if (fallbackLng && translations[key] && translations[key][fallbackLng]) {
+            return translations[key][fallbackLng] as string;
         }
         if ("development" === process.env.NODE_ENV) {
             return fallback;
@@ -81,15 +142,29 @@ export const useTranslation = <T = string>(initialTranslations: Record<string, a
     return translate(translations) as TranslationCallback<T>;
 };
 
-const TranslationContext = createContext("");
-
-const TranslateContext = ({children}: PropsWithChildren<any>): JSX.Element => {
-    console.log(path.resolve("./package.json"));
+export const TranslateContext = ({children, userConfig}: TranslateContextProps): JSX.Element => {
+    const useConfig: IConfig = {
+        ...rootConfig,
+        ...userConfig
+    };
     return (
-        <TranslationContext.Provider value={""}>
+        <TranslationContext.Provider value={useConfig}>
             {children}
-            </TranslationContext.Provider>
+        </TranslationContext.Provider>
     );
 };
 
-export default TranslateContext;
+export const TranslateMessage = ({word}: {word: string}) => {
+    const ctx = useContext(TranslationContext);
+    const translate = useTranslation(ctx.messages);
+    return (
+        <>
+            {translate(word, {
+                defaultLanguage: ctx.locale,
+                fallbackLng: ctx.fallbackLng,
+                separator: ctx.separator,
+                fallback: ctx.fallbackMsg
+            })}
+        </>
+    );
+};
