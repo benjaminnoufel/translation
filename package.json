@@ -1,6 +1,6 @@
 {
   "name": "@benjaminnoufel/translation",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "This is a library for translating text for react with hooks or Provider.",
   "license": "MIT",
   "main": "dist/translation.js",
@@ -8,6 +8,17 @@
   "files": [
     "dist"
   ],
+  "author": {
+    "name": "Benjamin Noufel",
+    "url": "https://github.com/benjaminnoufel"
+  },
+  "bugs": {
+    "url": "https://github.com/benjaminnoufel/translation/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benjaminnoufel/translation.git"
+  },
   "keywords": [
     "react",
     "i18n",
