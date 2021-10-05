@@ -20,6 +20,7 @@
                 "project": "tsconfig.json"
             },
             "rules": {
+                "@typescript-eslint/no-explicit-any": "off",
                 "@typescript-eslint/strict-boolean-expressions": "off",
                 "@typescript-eslint/prefer-nullish-coalescing": "off",
                 "@typescript-eslint/no-type-alias": "off"
@@ -37,7 +38,8 @@
             "rules": {
                 "@typescript-eslint/no-unsafe-assignment": "off",
                 "@typescript-eslint/no-unsafe-call": "off",
-                "@typescript-eslint/no-unsafe-return": "off"
+                "@typescript-eslint/no-unsafe-return": "off",
+                "jest/prefer-to-be": "off"
             }
         },
         {
@@ -53,8 +55,11 @@
         "SharedArrayBuffer": "readonly"
     },
     "rules": {
+        "no-sync": "off",
+        "no-unused-vars": "off",
         "no-shadow": "off",
         "guard-for-in": "off",
+        "no-param-reassign": "off",
         "sort-keys": "off"
     }
 }
