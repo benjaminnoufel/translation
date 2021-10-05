@@ -3,17 +3,20 @@ import {terser} from "rollup-plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 
 export default {
-    input: "src/translation.ts",
+    external: [
+        "path",
+        "react/jsx-runtime",
+        "react",
+        "react-dom"
+    ],
+    input: "src/translation.tsx",
     plugins: [
         remove({targets: "dist/*"}),
         typescript(),
         terser()
     ],
-    external: [
-        "react",
-        "react-dom"
-    ],
     output: {
-        file: "dist/translation.js"
+        file: "dist/translation.js",
+        format: "cjs"
     }
 };

@@ -1,11 +1,9 @@
-import {useRef, useState} from "react";
+import path from "path";
+import {createContext, PropsWithChildren, useRef, useState} from "react";
 
 interface ITranslate {
     [key: string]: ITranslate;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type A = any;
 
 export type SetLanguage = (newLanguage: string) => void;
 
@@ -42,10 +40,10 @@ export const useLanguage = (fallback?: string): [string, SetLanguage] => {
 };
 
 
-export const useTranslation = <T = string>(initialTranslations: Record<string, A>): TranslationCallback<T> => {
+export const useTranslation = <T = string>(initialTranslations: Record<string, any>): TranslationCallback<T> => {
     const translations = useRef(initialTranslations).current;
 
-    const translate = (translations: Record<string, A>) => <T = string>(key: string, defaultLanguage: string, separator: string = ".", fallback: string = `TODO.${key}.${defaultLanguage}`): string | T => {
+    const translate = (translations: Record<string, any>) => <T = string>(key: string, defaultLanguage: string, separator: string = ".", fallback: string = `TODO.${key}.${defaultLanguage}`): string | T => {
         if (!key.includes(separator)) {
             if (translations[key]) {
                 if (translations[key][defaultLanguage]) {
@@ -82,3 +80,16 @@ export const useTranslation = <T = string>(initialTranslations: Record<string, A
     };
     return translate(translations) as TranslationCallback<T>;
 };
+
+const TranslationContext = createContext("");
+
+const TranslateContext = ({children}: PropsWithChildren<any>): JSX.Element => {
+    console.log(path.resolve("./package.json"));
+    return (
+        <TranslationContext.Provider value={""}>
+            {children}
+            </TranslationContext.Provider>
+    );
+};
+
+export default TranslateContext;
