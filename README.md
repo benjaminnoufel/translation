@@ -47,7 +47,7 @@ $ yarn add @benjaminnoufel/translation
 | fallbackMsg | string | TODO{separator}{word}{locale} or ""|
 | messages | object | {} |
 
-:warning: messages must be respect the JSON norm
+:warning: messages must respect the JSON norm
 
 ## Examples
 
