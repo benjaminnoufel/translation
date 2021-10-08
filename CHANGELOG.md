@@ -2,11 +2,29 @@
 
 ## Versions
 
+- [`2.0.2`](#202)
 - [`2.0.1`](#201)
 - [`2.0.0`](#200)
 - [`0.1.0`](#010)
 
-## 0.2.1
+## 2.0.2
+
+*2021-10-08*
+
+### Major changes
+
+None.
+
+### Minor changes
+
+- Adding JSDoc.
+- Change build dir to lib/
+
+### Bug & security fixes
+
+None.
+
+## 2.0.1
 
 *2021-10-05*
 

@@ -1,12 +1,12 @@
 {
   "name": "@benjaminnoufel/translation",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "This is a library for translating text for react with hooks or Provider.",
   "license": "MIT",
-  "main": "dist/translation.js",
-  "types": "dist/translation.d.ts",
+  "main": "lib/translation.js",
+  "types": "lib/translation.d.ts",
   "files": [
-    "dist"
+    "lib"
   ],
   "author": {
     "name": "Benjamin Noufel",
@@ -31,7 +31,7 @@
     "build": "rollup --config rollup.config.ts",
     "test": "jest",
     "lint": "eslint --ext .ts,.js,.json .",
-    "types": "tsc --emitDeclarationOnly --declaration --outDir dist"
+    "types": "tsc --emitDeclarationOnly --declaration --project tsconfig.declaration.json"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.6",
