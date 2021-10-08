@@ -1,7 +1,7 @@
 /.idea/
 /node_modules/
 /coverage/
-/dist
+/lib
 /.env
 /.npmrc
 /.yarnrc
