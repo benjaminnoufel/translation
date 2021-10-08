@@ -1,6 +1,6 @@
 import {ReactNode, createContext, useContext, useRef, useState} from "react";
 
-interface TranslateContextProps {
+interface TranslateProviderProps {
     userConfig?: IConfig;
     children: ReactNode;
 }
@@ -176,7 +176,7 @@ export const useTranslation = <T, >(initialTranslations: Record<string, any>): T
  * @returns {JSX.Element}
  * @constructor
  */
-export const TranslateContext = ({children, userConfig}: TranslateContextProps): JSX.Element => {
+export const TranslateProvider = ({children, userConfig}: TranslateProviderProps): JSX.Element => {
     const useConfig: IConfig = {
         ...rootConfig,
         ...userConfig

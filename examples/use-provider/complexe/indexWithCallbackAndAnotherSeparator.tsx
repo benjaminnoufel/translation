@@ -1,4 +1,4 @@
-import {TranslateContext, TranslateMessage} from "@benjaminnoufel/translation";
+import {TranslateProvider, TranslateMessage} from "@benjaminnoufel/translation";
 import React, {StrictMode} from "react";
 import ReactDOM from "react-dom";
 
@@ -17,7 +17,7 @@ const App = () => (
 
 ReactDOM.render(
     <StrictMode>
-        <TranslateContext userConfig={{
+        <TranslateProvider userConfig={{
             locale: "ru",
             fallbackLng: "en",
             separator: "->",
@@ -37,7 +37,7 @@ ReactDOM.render(
             }
         }}>
             <App />
-        </TranslateContext>
+        </TranslateProvider>
     </StrictMode>,
     document.getElementById("app")
 );
