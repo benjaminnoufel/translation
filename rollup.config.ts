@@ -1,6 +1,7 @@
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import remove from "rollup-plugin-delete";
+import {resolve} from "path";
 import {terser} from "rollup-plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 
@@ -11,16 +12,16 @@ export default {
         "react",
         "react-dom"
     ],
-    input: "src/translation.tsx",
+    input: resolve("src", "translation.tsx"),
     plugins: [
-        remove({targets: "dist/*"}),
+        remove({targets: resolve("lib", "*")}),
         typescript(),
         commonjs(),
         nodeResolve(),
         terser()
     ],
     output: {
-        file: "dist/translation.js",
+        file: resolve("lib", "translation.js"),
         format: "cjs",
         sourcemap: true
     }
