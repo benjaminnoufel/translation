@@ -38,6 +38,10 @@ interface ITranslateFunc {
 
 export type SetLanguage = (newLanguage: string) => void;
 
+/**
+ * Create Context for use user config.
+ * @type {React.Context<IConfig>}
+ */
 const TranslationContext = createContext<IConfig>(rootConfig);
 
 export type TranslationCallback<T = string> = (key: string, {defaultLanguage, fallbackLng, separator, fallback}: ITranslateFunc) => T;
@@ -48,6 +52,13 @@ interface IObjectFind {
     separator: string;
 }
 
+/**
+ * Search recursively in objet if key exist by split it with "separator`
+ * @param {string} path
+ * @param {ITranslate} target
+ * @param {string} separator
+ * @returns {string | ITranslate | null}
+ */
 const objectFind = ({path, target, separator}: IObjectFind): null | string | ITranslate => {
     for (const property in target) {
         const [firstProperty, ...restProperties] = path.split(separator);
@@ -68,7 +79,13 @@ const objectFind = ({path, target, separator}: IObjectFind): null | string | ITr
     return null;
 };
 
-
+/**
+ * React Hook
+ * Get user language or use fallback and set it in localStorage
+ * Return also a setter for set a new language
+ * @param {string} fallback
+ * @returns {[string, SetLanguage]}
+ */
 export const useLanguage = (fallback?: string): [string, SetLanguage] => {
     const navigatorLanguage: string = navigator.language;
     const normalizedNavigatorLanguage: string = navigatorLanguage.slice(0, navigatorLanguage.indexOf("-"));
@@ -82,6 +99,13 @@ export const useLanguage = (fallback?: string): [string, SetLanguage] => {
     return [lang, setLang];
 };
 
+/**
+ * React Hooks
+ * Get an object in params who contains a translation object.
+ * See example for usage (https://github.com/benjaminnoufel/translation/tree/next/examples/use-hooks)
+ * @param {Record<string, any>} initialTranslations
+ * @returns {TranslationCallback<T>}
+ */
 export const useTranslation = <T, >(initialTranslations: Record<string, any>): TranslationCallback<T> => {
     const translations = useRef(initialTranslations).current;
 
@@ -142,6 +166,16 @@ export const useTranslation = <T, >(initialTranslations: Record<string, any>): T
     return translate(translations) as TranslationCallback<T>;
 };
 
+/**
+ * React Context
+ * Wrap context on component app wich is taking a configuration in a props
+ * See example for usage (https://github.com/benjaminnoufel/translation/tree/next/examples/use-provider)
+ * For configuration you can see all params in README.md (https://github.com/benjaminnoufel/translation)
+ * @param {React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined} children
+ * @param {IConfig | undefined} userConfig
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const TranslateContext = ({children, userConfig}: TranslateContextProps): JSX.Element => {
     const useConfig: IConfig = {
         ...rootConfig,
@@ -154,6 +188,14 @@ export const TranslateContext = ({children, userConfig}: TranslateContextProps):
     );
 };
 
+/**
+ * React Component
+ * Call it as a Component with a key that we want to translate
+ * See example for usage (https://github.com/benjaminnoufel/translation/tree/next/examples/use-provider)
+ * @param {string} word
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const TranslateMessage = ({word}: {word: string}) => {
     const ctx = useContext(TranslationContext);
     const translate = useTranslation(ctx.messages);
