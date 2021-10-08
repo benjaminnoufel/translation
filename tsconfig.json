@@ -1,8 +1,8 @@
 {
     "exclude": [
-        "src/translation.spec.ts"
+        "src/translation.spec.ts",
+        "examples"
     ],
-    "include": ["src"],
     "compilerOptions": {
         "target": "esnext",
         "module": "esnext",
